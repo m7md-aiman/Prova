@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بروفة — مراجعة خطة التحويل، الإشارة 1064</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+  <link rel="icon" type="image/svg+xml" href="/static/img/prova_logo.svg">
+  <link rel="stylesheet" href="/static/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-band"><div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-logo"><img src="/static/img/prova_logo.svg" alt="شعار بروفة"></span>
+        <div class="brand-text">
+          <div class="brand-line"><span class="brand-name">بروفة</span><span class="proto-tag">نموذج أولي</span></div>
+          <div class="brand-sub">منصة مراجعة خطط التحويل المروري للأعمال على الطرق</div>
+        </div>
+      </div>
+      <div class="case-chip" id="case-chip" hidden><span class="case-dot" aria-hidden="true"></span><span>الحالة: <b>الإشارة <span class="num">1064</span></b> — العنقري × العروبة</span></div>
+    </div></div>
+    <nav class="steps" aria-label="مراحل المراجعة">
+      <ol id="stepbar">
+        <li data-step="1"><button type="button"><span class="step-n">1</span><span class="step-l">تقديم الطلب</span></button></li>
+        <li data-step="2"><button type="button"><span class="step-n">2</span><span class="step-l">نتيجة المحاكاة</span></button></li>
+        <li data-step="3"><button type="button"><span class="step-n">3</span><span class="step-l">مقترحات الذكاء الاصطناعي</span></button></li>
+        <li data-step="4"><button type="button"><span class="step-n">4</span><span class="step-l">التقرير</span></button></li>
+      </ol>
+    </nav>
+  </header>
+
+  <main id="app">
+    <!-- Step 1: request -->
+    <section class="step" id="step-1" data-step="1">
+      <div id="s1-upload"></div>
+      <div class="workspace" id="s1-workspace" hidden>
+        <aside class="panel" id="s1-panel"></aside>
+        <div class="map-slot" data-slot="1"></div>
+      </div>
+    </section>
+
+    <!-- Step 2: simulation result -->
+    <section class="step" id="step-2" data-step="2" hidden>
+      <div class="workspace">
+        <aside class="panel" id="s2-panel"></aside>
+        <div class="map-slot" data-slot="2"></div>
+      </div>
+      <div id="s2-below"></div>
+    </section>
+
+    <!-- Step 3: AI suggestions -->
+    <section class="step" id="step-3" data-step="3" hidden>
+      <div class="workspace">
+        <aside class="panel" id="s3-panel"></aside>
+        <div class="map-slot" data-slot="3"></div>
+      </div>
+      <div id="s3-ai"></div>
+      <div id="s3-details"></div>
+    </section>
+
+    <!-- Step 4: report and questions -->
+    <section class="step" id="step-4" data-step="4" hidden>
+      <div id="s4"></div>
+    </section>
+
+    <!-- Shared map area, moved between the step slots -->
+    <div id="map-area" class="map-area">
+      <div class="map-toolbar">
+        <div class="seg" id="map-mode" role="group" aria-label="طريقة العرض">
+          <button type="button" data-mode="split" class="on">قبل وبعد جنباً إلى جنب</button>
+          <button type="button" data-mode="plan">الخطة</button>
+          <button type="button" data-mode="before">قبل الأعمال</button>
+        </div>
+        <div class="map-actions">
+          <button type="button" class="btn-ghost" id="btn-works">منطقة الأعمال</button>
+          <button type="button" class="btn-ghost" id="btn-fit">العرض الكامل</button>
+        </div>
+      </div>
+      <div class="maps" id="maps">
+        <figure class="map-frame" id="frame-ref" hidden>
+          <figcaption class="map-cap" id="cap-ref"></figcaption>
+          <div class="map" id="map-ref" dir="ltr"></div>
+        </figure>
+        <figure class="map-frame" id="frame-main">
+          <figcaption class="map-cap" id="cap-main"></figcaption>
+          <div class="map" id="map-main" dir="ltr"></div>
+        </figure>
+      </div>
+      <div class="appr-key" id="appr-key"></div>
+      <div class="legend" id="legend">
+        <div class="lg-item lg-heat">
+          <div class="lg-title">نسبة الوقت الذي يقف فيه طابور (%)</div>
+          <div class="lg-ramp" id="lg-ramp"></div>
+          <div class="lg-ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+        </div>
+        <div class="lg-item"><span class="lg-hatch" aria-hidden="true"></span><span>مسار مغلق</span></div>
+        <div class="lg-item"><span class="lg-lane" aria-hidden="true"></span><span>مسارات الطريق</span></div>
+        <div class="lg-item"><span class="lg-sig" aria-hidden="true"></span><span>الإشارة 1064</span></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot-band"><div class="foot">
+    <span><b>بروفة</b> · نموذج أولي. جميع الأرقام من محاكاة معايَرة مسبقة الحساب لتقاطع واحد، وليست قياسات ميدانية.</span>
+    <span>لا يمثّل هذا النموذج أي جهة رسمية.</span>
+  </div></footer>
+
+  <script src="/static/vendor/leaflet/leaflet.js"></script>
+  <script src="/static/vendor/proj4.js"></script>
+  <script src="/static/js/map.js"></script>
+  <script src="/static/js/ai.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

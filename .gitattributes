@@ -1,0 +1,5 @@
+# Data files are stored byte-for-byte (no line-ending conversion): the deployed copies must stay
+# identical to the handoff originals.
+*.net.xml -text
+data/*.json -text
+data/*.csv -text
